@@ -74,14 +74,14 @@ Vas a ver el carrito con tres productos y su total.
 
 **P1** — Calculá a mano el total esperado: Leche ($350 x2) + Pan ($200 x3) + Queso ($1500 x1).
 
-> R:2800
+> R: (escribí el total esperado)
 
 **P2** — ¿El total que imprime el programa coincide con lo que calculaste? Si no coincide, ¿cuánto muestra?
 
-> R:No coincide
+> R:
 
 ```
-TOTAL_PROGRAMA=2050
+TOTAL_PROGRAMA=
 ```
 _(escribí el número que imprimió el programa)_
 
@@ -131,7 +131,7 @@ Mirá el código en `tests/test_unitarios.c` para entender la estructura de un t
 
 **P3** — ¿Qué hace `carrito_init` y por qué es importante llamarla antes de usar el carrito?
 
-> R:Se llama a carrito_init antes de usar el carrito porque nos asegura de que el carrito este vacio, sin productos.
+> R:
 
 ---
 
@@ -166,10 +166,10 @@ make test_unitarios
 
 **P4** — ¿El nuevo test pasa o falla?
 
-> R:El nuevo test pasa.
+> R:
 
 ```
-TEST_PRECIO_UNITARIO_PASA=SI
+TEST_PRECIO_UNITARIO_PASA=
 ```
 _(SI o NO)_
 
@@ -195,10 +195,10 @@ Descomentá `/* test_total_con_cantidad(); */` en el `main()`, compilá y corré
 
 **P5** — ¿Este test pasa o falla? ¿Qué valor esperaba y qué obtuvo?
 
-> R:Este test no pasa, espera el valor 700 y obtuvo 350.
+> R:
 
 ```
-TEST_TOTAL_CANTIDAD_PASA=NO
+TEST_TOTAL_CANTIDAD_PASA=
 ```
 _(SI o NO)_
 
@@ -210,11 +210,11 @@ El test anterior encontró un bug en `carrito_total`. Abrí `src/carrito.c` y bu
 
 **P6** — ¿En qué línea está el bug y qué dice ese código?
 
-> R:El bug esta en la linea 24, que dice "total += c->items[i].precio;".
+> R:
 
 **P7** — ¿Qué debería hacer esa línea para calcular el total correctamente?
 
-> R:En esa misma linea se tendria que multiplicar por c->items[i].cantidad. 
+> R:
 
 Corregí el bug. Luego volvé a compilar y correr:
 
@@ -232,7 +232,7 @@ cat salidas/test_unitarios.txt
 ```
 
 ```
-TESTS_UNITARIOS_PASAN=SI
+TESTS_UNITARIOS_PASAN=
 ```
 _(escribí SI si todos los tests pasan ahora)_
 
@@ -254,18 +254,18 @@ Descomentá `/* test_carrito_lleno(); */` en el `main()`, compilá y corré.
 
 **P8** — ¿El test pasa o falla? Si falla, ¿qué devuelve ese 5to `carrito_agregar`?
 
-> R:Si, el test falla. El 5to carrito_agregar devuelve 1.
+> R:
 
 Si el test falló, encontraste el segundo bug. Buscá en `src/carrito.c` la condición del `if` dentro de `carrito_agregar`.
 
 **P9** — ¿Cuál es el operador incorrecto y cuál debería ser?
 
-> R:El operador incorrecto es <=, deberia ser <.
+> R:
 
 Corregí el bug, volvé a compilar y verificá que todos los tests pasan.
 
 ```
-BUG_2_CORREGIDO=SI
+BUG_2_CORREGIDO=
 ```
 _(SI o NO)_
 
@@ -301,7 +301,7 @@ cat salidas/test_integracion.txt
 ```
 
 ```
-TEST_INTEGRACION_PASA=SI
+TEST_INTEGRACION_PASA=
 ```
 _(SI o NO)_
 
@@ -319,7 +319,7 @@ Escribí `test_agregar_hasta_llenar()` en el lugar `/* PARTE E */`. Este test de
 Descomentá `/* test_agregar_hasta_llenar(); */` en el `main()`, compilá y corré.
 
 ```
-TEST_LLENAR_PASA=SI
+TEST_LLENAR_PASA=
 ```
 _(SI o NO)_
 
@@ -338,10 +338,10 @@ Las líneas con `#####` nunca se ejecutaron — no están cubiertas por los test
 
 **P10** — ¿Hay alguna línea de `carrito.c` con `#####`? ¿Cuál y por qué no se ejecutó?
 
-> R:Si hay lineas con #####, la linea 29 y 30 que es la funcion carrito_descuento. Creo que no se ejecuto porque no hay un test que pruebe que la cuenta hecha en la funcion esta bien resuelta.
+> R:
 
 ```
-COBERTURA_COMPLETA=NO
+COBERTURA_COMPLETA=
 ```
 _(SI si todas las líneas están cubiertas, NO si hay alguna con #####)_
 
@@ -351,7 +351,7 @@ _(SI si todas las líneas están cubiertas, NO si hay alguna con #####)_
 
 **P11** — ¿Qué diferencia hay entre un test unitario y uno de integración? ¿Cuál de los dos detectó primero el bug de `carrito_total`?
 
-> R:Los test unitarios prueban las funciones una por una para ver si funcionan por si solas, los test de integracion prueban que funcionen la conbinacion de funciones aplicadas a un carrito. El que primero detecta el bug de carrito_total es el test unitario "test_total_con_cantidad", porque si sabemos que falla ese test, fallara cualquier test de integracion que aplique esa funcion.
+> R:
 
 **P12** — El bug de capacidad en `carrito_agregar` causa un **buffer overflow**: se escribe más allá del array. ¿Por qué esto es peligroso en C pero no ocurriría en un lenguaje como Python o Java?
 
@@ -366,12 +366,12 @@ _(SI si todas las líneas están cubiertas, NO si hay alguna con #####)_
 > R:
 
 ```
-BUG_EN_FUNCION_1=carrito_total
+BUG_EN_FUNCION_1=
 ```
 _(nombre de la función con el primer bug)_
 
 ```
-BUG_EN_FUNCION_2=carrito_agregar
+BUG_EN_FUNCION_2=
 ```
 _(nombre de la función con el segundo bug)_
 
