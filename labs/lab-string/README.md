@@ -277,8 +277,7 @@ Los tests de `IsEmpty` ya están activos en `StringTest.c`. Corré `make test` y
 
 **P1** — `IsEmpty` podría haberse escrito también como `return s[0] == '\0'`. ¿Son equivalentes? ¿Por qué?
 
-> R:
-
+> R: Sí. En C, s[0] equivale a *(s + 0), es decir, *s: ambas expresiones acceden al primer carácter de la cadena.
 ---
 
 ### Función 1: `GetLength`
@@ -328,14 +327,12 @@ make test
 
 **P2** — ¿Qué hace `s + 1`? ¿Por qué avanza al siguiente carácter y no al siguiente byte?
 
-> R:
-
+> R: s + 1 apunta al siguiente elemento del arreglo. La aritmética de punteros avanza sizeof(*s) bytes; como s apunta a char y sizeof(char) es 1, en este caso avanzar un carácter también es avanzar un byte.
 **P3** — Si llamaras a `GetLength(NULL)`, ¿qué pasaría? ¿Por qué las precondiciones del contrato dicen `s != NULL`?
 
-> R:
-
+> R: Se desreferenciaría un puntero nulo dentro de IsEmpty, lo que causa comportamiento indefinido y puede terminar el programa. La precondición s != NULL exige recibir un puntero válido a una cadena terminada en '\0'.
 ```
-GETLENGTH_PASA=
+GETLENGTH_PASA=SI
 ```
 _(escribí SI cuando todos los tests de GetLength pasen)_
 
@@ -367,8 +364,7 @@ El `while` termina cuando alguna de las dos cadenas llega a `'\0'`. Después dev
 
 **P4** — ¿Qué dos casos están mal cubiertos por `return 1`? Describí un ejemplo para cada uno.
 
-> R:
-
+> R: Falla cuando una cadena es prefijo propio de la otra. Por ejemplo, AreEqual("ab", "abc") devuelve 1 aunque la segunda tiene caracteres adicionales; AreEqual("abc", "ab") también devuelve 1 aunque la primera es más larga. Al salir del while deben haber terminado ambas.
 #### Corrección
 
 Reemplazá la última línea de `AreEqual` en `String.c`:
@@ -384,7 +380,7 @@ make test
 ```
 
 ```
-AREEQUAL_PASA=
+AREEQUAL_PASA=SI
 ```
 _(escribí SI cuando todos los tests de AreEqual pasen)_
 
@@ -414,8 +410,7 @@ int AreDecimalDigits(const char *s) {
 
 **P5** — ¿Por qué la cadena vacía no debería considerarse un conjunto de dígitos decimales? Pensalo desde la especificación matemática.
 
-> R:
-
+> R: Porque la especificación establece AreDecimalDigits(ε) = 0 y exige al menos un dígito. Una cadena vacía no representa un número decimal.
 #### Corrección
 
 Corregí el valor de retorno para el caso de cadena vacía en `String.c`.
@@ -425,7 +420,7 @@ make test
 ```
 
 ```
-AREDECIMALDIGITS_PASA=
+AREDECIMALDIGITS_PASA=SI
 ```
 _(escribí SI cuando todos los tests de AreDecimalDigits pasen)_
 
@@ -452,7 +447,7 @@ make test
 ```
 
 ```
-CONTAINS_PASA=
+CONTAINS_PASA=SI
 ```
 _(escribí SI cuando todos los tests de Contains pasen)_
 
@@ -467,8 +462,7 @@ Antes de implementar, discutí con tu equipo:
 
 **P6** — Conclusión de la discusión:
 
-> R:
-
+> R: Conviene mantener ToInteger en Conversion: transforma una cadena en un entero y cruza la frontera entre tipos. String se ocupa de operaciones sobre cadenas; separarlas mantiene la cohesión y responsabilidades claras.
 ---
 
 ### Función: `ToInteger`
@@ -494,8 +488,7 @@ int ToInteger(const char *s) {
 
 **P7** — El loop acumula correctamente el valor en `resultado`. ¿Qué está mal en el `return`?
 
-> R:
-
+> R: Devuelve solamente el signo (1 o -1) y descarta el valor acumulado. Debe devolver signo * resultado.
 #### Corrección
 
 Corregí la última línea de `ToInteger` en `Conversion.c`.
@@ -506,10 +499,9 @@ make test
 
 **P8** — La expresión `*s - '0'` convierte un carácter dígito al entero correspondiente. ¿Por qué funciona? ¿Qué devuelve `'3' - '0'`?
 
-> R:
-
+> R: Los caracteres '0' a '9' tienen códigos consecutivos en C. Restar el código de '0' obtiene el valor del dígito; '3' - '0' devuelve 3.
 ```
-TOINTEGER_PASA=
+TOINTEGER_PASA=SI
 ```
 _(escribí SI cuando todos los tests de ToInteger pasen)_
 
@@ -562,8 +554,7 @@ foo
 
 **P9** — ¿Por qué `(void)argc` suprime un warning? ¿Cuándo sería necesario usar `argc`?
 
-> R:
-
+> R: (void)argc indica que se ignora deliberadamente el parámetro y evita el warning de parámetro no utilizado. Se usa argc para validar la cantidad de argumentos, por ejemplo, antes de acceder a argv[1].
 ---
 
 ### Programa: `longitudes`
@@ -589,7 +580,7 @@ Salida esperada:
 ```
 
 ```
-LONGITUDES_PASA=
+LONGITUDES_PASA=SI
 ```
 _(SI o NO)_
 
@@ -616,7 +607,7 @@ make mayorlongitud
 ```
 
 ```
-MAYORLONGITUD_PASA=
+MAYORLONGITUD_PASA=SI
 ```
 _(SI o NO)_
 
@@ -635,7 +626,7 @@ make todosiguales
 ```
 
 ```
-TODOSIGUALES_PASA=
+TODOSIGUALES_PASA=SI
 ```
 _(SI o NO)_
 
@@ -652,7 +643,7 @@ make suma
 ```
 
 ```
-SUMA_PASA=
+SUMA_PASA=SI
 ```
 _(SI o NO)_
 
@@ -662,16 +653,13 @@ _(SI o NO)_
 
 **P10** — `GetLength` es recursiva pero en C una llamada recursiva consume un stack frame. Si llamaras `GetLength` con un string de 1.000.000 de caracteres, ¿qué pasaría? ¿Cómo lo resolverías?
 
-> R:
-
+> R: Puede agotar la pila y provocar un stack overflow por la cantidad de llamadas recursivas; C no garantiza optimizar esta recursión. Para cadenas grandes usaría una implementación iterativa con un puntero y un contador, que requiere memoria adicional constante.
 **P11** — En la Parte III, todos los programas usan `char **arg` para iterar en vez de un índice entero. ¿Qué ventaja tiene este estilo? ¿Cuándo sería preferible usar el índice?
 
-> R:
-
+> R: Permite recorrer directamente los argumentos hasta el puntero NULL final, sin mantener un índice ni depender de argc para terminar. Un índice es preferible si se necesita la posición de cada argumento, acceso directo a posiciones o recorrer un rango determinado.
 **P12** — En C, `"hola"` es un literal de tipo `const char *`. Si intentaras modificar un carácter con `s[0] = 'H'`, el comportamiento es indefinido. ¿Por qué? ¿En qué parte de la memoria viven los literales?
 
-> R:
-
+> R: Modificar un literal de cadena produce comportamiento indefinido: tiene duración de almacenamiento estática y suele ubicarse en una sección de solo lectura. En C, el literal es un arreglo de char, no de tipo const char *; al usarlo en una expresión suele convertirse en puntero. Se recomienda const char *s = "hola"; para modificar una copia se puede declarar char s[] = "hola".
 ---
 
 ## Entrega
@@ -706,3 +694,4 @@ Para ver los resultados:
 2. Hacé click en la pestaña **Actions**
 3. Hacé click en la ejecución más reciente → job **Grading · lab-string**
 4. Al final del job vas a ver la tabla con el resultado de cada check y el puntaje total
+
